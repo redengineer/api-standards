@@ -12,40 +12,34 @@
 * [Mock Responses](#mock-responses)
 * [JSONP](#jsonp)
 
-## Guidelines
+## 指导原则
 
-This document provides guidelines and examples for Xiaohongshu Web APIs, encouraging consistency, maintainability, and best practices across applications. White House APIs aim to balance a truly RESTful API interface with a positive developer experience (DX).
-
-This document borrows heavily from:
-* [White House API Standards](https://github.com/WhiteHouse/api-standards)
-* [Designing HTTP Interfaces and RESTful Web Services](https://www.youtube.com/watch?v=zEyg0TnieLg)
-* [API Facade Pattern](http://apigee.com/about/resources/ebooks/api-fa%C3%A7ade-pattern), by Brian Mulloy, Apigee
-* [Web API Design](http://pages.apigee.com/web-api-design-ebook.html), by Brian Mulloy, Apigee
-* [Fielding's Dissertation on REST](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm)
+本文档提供了小红书API开发过程中的知道原则和示例，鼓励一致性，可维护和借鉴行业内最佳实践，是完全RESTful API定义和开发效率的一个平衡。
 
 ## Pragmatic REST
 
-These guidelines aim to support a truly RESTful API. Here are a few exceptions:
-* Put the version number of the API in the URL (see examples below). Don’t accept any requests that do not specify a version number.
-* Default formats is JSON, like this, without postfix like ".json" or ".xml":
+本指导原则目标达到完全Restful, 除了以下几个例外：
+* 版本号必须放在URL中, 如下
     * http://www.xiaohongshu.com/api/v1/magazines
 
 ## RESTful URLs
 
-### General guidelines for RESTful URLs
-* A URL identifies a resource.
-* URLs should include nouns, not verbs.
-* Use plural nouns only for consistency (no singular nouns).
-* Use HTTP verbs (GET, POST, PUT, DELETE) to operate on the collections and elements.
-* You shouldn’t need to go deeper than resource/identifier/resource.
-* Put the version number at the base of your URL, for example http://www.xiaohongshu.com/v1/path/to/resource.
-* URL v. header:
-    * If it changes the logic you write to handle the response, put it in the URL.
-    * If it doesn’t change the logic for each response, like OAuth info, put it in the header.
-* Specify optional fields in a comma separated list.
-* Formats should be in the form of api/v2/resource/{id}
+### 通用原则
+* 每一个URL必须代表一种资源 (resource)
+* URL只能有名词，不能含有动词
+* 为了一致，名词应该使用复数
+* 对于资源的具体操作，使用HTTP动词 (GET, POST, PUT, DELETE)
+* URL不应该比resource/identifier/resource更深
+* 将版本号放在URL路径的第一层, 如http://www.xiaohongshu.com/v1/path/to/resource.
+* 指定返回字段的话用逗号隔开
 
-### Good URL examples
+### 协议
+API与用户的通信协议，总是使用HTTPS. (TBD)
+
+### 格式(Formating)
+服务器返回的数据格式使用JSON.
+
+### 好的例子
 * List of magazines:
     * GET http://www.xiaohongshu.com/api/v1/magazines
 * Filtering is a query:
@@ -60,17 +54,17 @@ These guidelines aim to support a truly RESTful API. Here are a few exceptions:
 * Add a new article to a particular magazine:
     * POST http://www.xiaohongshu.com/api/v1/magazines/1234/articles
 
-### Bad URL examples
-* Non-plural noun:
+### 坏的例子
+* 非复数:
     * http://www.xiaohongshu.com/magazine
     * http://www.xiaohongshu.com/magazine/1234
     * http://www.xiaohongshu.com/publisher/magazine/1234
-* Verb in URL:
+* URL中含动词:
     * http://www.xiaohongshu.com/magazine/1234/create
-* Filter outside of query string
+* 非query中的过滤
     * http://www.xiaohongshu.com/magazines/2011/desc
 
-## HTTP Verbs
+## HTTP动词
 
 HTTP verbs, or methods, should be used in compliance with their definitions under the [HTTP/1.1](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) standard.
 The action taken on the representation will be contextual to the media type being worked on and its current state. Here's an example of how HTTP verbs map to create, read, update, delete operations in a particular context:
@@ -83,8 +77,19 @@ The action taken on the representation will be contextual to the media type bein
 
 (Example from Web API Design, by Brian Mulloy, Apigee.)
 
+### 过滤信息 (Filtering)
+如果记录数量很多，服务器不可能都将他们返回给用户。API应该提供参数，过滤返回结果。
 
-## Responses
+下面是一些常见 的参数：
+* ?limit=10: 指定返回记录的数量
+* ?offset=10: 指定返回记录的开始位置
+* ?page=2&per_page=100: 指定第几页，以及每页的记录数
+* ?sortby=name&order=asc: 指定返回结果按照哪个属性排序，以及排序顺序
+* ?animal_type_id=1: 指定筛选条件
+
+参数的设计允许存在冗余，即允许API路径和URL参数偶尔有重复。比如，GET /zoo/ID/animals与/animals?zoo_id=ID的含义是相同的。
+
+## 返回结果
 
 * No values in keys
 * No internal-specific names (e.g. "node" and "taxonomy term")
@@ -110,7 +115,7 @@ Values in keys:
     ],
 
 
-## Error handling
+## 错误处理 (Error handling)
 
 Error responses should include a common HTTP status code, message for the developer, message for the end-user (when appropriate), internal error code (corresponding to some specific internally determined ID), links where developers can find more info. For example:
 
@@ -130,20 +135,14 @@ Use three simple, common response codes indicating (1) success, (2) failure due 
 * 500 - Internal Server Error
 
 
-## Versions
+## 版本 (Versioning)
 
-* Never release an API without a version number.
-* Versions should be integers, not decimal numbers, prefixed with ‘v’. For example:
-    * Good: v1, v2, v3
-    * Bad: v-1.1, v1.2, 1.3
-* Maintain APIs at least one version back.
-* Should specify which iOS/Android client version this api version supports.
-    * Good: 
-        * Support iOS >= v2.3
-        * Deprecated Android v2.2
+* 发布API必须含有版本号
+* 版本号应该是整数，不能含有小数，以"v"开头，如：
+    * 好的: v1, v2, v3
+    * 不好的: v-1.1, v1.2, 1.3
 
-
-## Record limits
+## 返回限制(Record limits)
 
 * If no limit is specified, return results with a default limit.
 * To get records 51 through 75 do this:
@@ -295,3 +294,11 @@ JSONP is easiest explained with an example. Here's one from [StackOverflow](http
 >         };
 
 http://stackoverflow.com/questions/2067472/what-is-jsonp-all-about?answertab=votes#tab-top
+
+### 参考文档
+* [RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
+* [White House API Standards](https://github.com/WhiteHouse/api-standards)
+* [Designing HTTP Interfaces and RESTful Web Services](https://www.youtube.com/watch?v=zEyg0TnieLg)
+* [API Facade Pattern](http://apigee.com/about/resources/ebooks/api-fa%C3%A7ade-pattern), by Brian Mulloy, Apigee
+* [Web API Design](http://pages.apigee.com/web-api-design-ebook.html), by Brian Mulloy, Apigee
+* [Fielding's Dissertation on REST](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm)
