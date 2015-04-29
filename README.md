@@ -1,4 +1,4 @@
-# White House Web API Standards
+# Xiaohongshu Web API Standards
 
 * [Guidelines](#guidelines)
 * [Pragmatic REST](#pragmatic-rest)
@@ -28,7 +28,7 @@ This document borrows heavily from:
 These guidelines aim to support a truly RESTful API. Here are a few exceptions:
 * Put the version number of the API in the URL (see examples below). Don’t accept any requests that do not specify a version number.
 * Default formats is JSON, like this, without postfix like ".json" or ".xml":
-    * http://example.gov/api/v1/magazines
+    * http://www.xiaohongshu.com/api/v1/magazines
 
 ## RESTful URLs
 
@@ -47,28 +47,28 @@ These guidelines aim to support a truly RESTful API. Here are a few exceptions:
 
 ### Good URL examples
 * List of magazines:
-    * GET http://www.example.gov/api/v1/magazines
+    * GET http://www.xiaohongshu.com/api/v1/magazines
 * Filtering is a query:
-    * GET http://www.example.gov/api/v1/magazines?year=2011&sort=desc
-    * GET http://www.example.gov/api/v1/magazines?topic=economy&year=2011
+    * GET http://www.xiaohongshu.com/api/v1/magazines?year=2011&sort=desc
+    * GET http://www.xiaohongshu.com/api/v1/magazines?topic=economy&year=2011
 * A single magazine in JSON format:
-    * GET http://www.example.gov/api/v1/magazines/1234
+    * GET http://www.xiaohongshu.com/api/v1/magazines/1234
 * All articles in (or belonging to) this magazine:
-    * GET http://www.example.gov/api/v1/magazines/1234/articles
+    * GET http://www.xiaohongshu.com/api/v1/magazines/1234/articles
 * Specify optional fields in a comma separated list:
-    * GET http://www.example.gov/api/v1/magazines/1234?fields=title,subtitle,date
+    * GET http://www.xiaohongshu.com/api/v1/magazines/1234?fields=title,subtitle,date
 * Add a new article to a particular magazine:
-    * POST http://example.gov/api/v1/magazines/1234/articles
+    * POST http://www.xiaohongshu.com/api/v1/magazines/1234/articles
 
 ### Bad URL examples
 * Non-plural noun:
-    * http://www.example.gov/magazine
-    * http://www.example.gov/magazine/1234
-    * http://www.example.gov/publisher/magazine/1234
+    * http://www.xiaohongshu.com/magazine
+    * http://www.xiaohongshu.com/magazine/1234
+    * http://www.xiaohongshu.com/publisher/magazine/1234
 * Verb in URL:
-    * http://www.example.gov/magazine/1234/create
+    * http://www.xiaohongshu.com/magazine/1234/create
 * Filter outside of query string
-    * http://www.example.gov/magazines/2011/desc
+    * http://www.xiaohongshu.com/magazines/2011/desc
 
 ## HTTP Verbs
 
@@ -120,7 +120,7 @@ Error responses should include a common HTTP status code, message for the develo
        suggestions about how to solve their problems here",
       "userMessage" : "This is a message that can be passed along to end-users, if needed.",
       "errorCode" : "444444",
-      "moreInfo" : "http://www.example.gov/developer/path/to/help/for/444444,
+      "moreInfo" : "http://www.xiaohongshu.com/developer/path/to/help/for/444444,
        http://drupal.org/node/444444",
     }
 
@@ -147,7 +147,7 @@ Use three simple, common response codes indicating (1) success, (2) failure due 
 
 * If no limit is specified, return results with a default limit.
 * To get records 51 through 75 do this:
-    * http://example.gov/magazines?limit=25&offset=50
+    * http://www.xiaohongshu.com/magazines?limit=25&offset=50
     * offset=50 means, ‘skip the first 50 records’
     * limit=25 means, ‘return a maximum of 25 records’
 
