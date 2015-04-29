@@ -14,9 +14,10 @@
 
 ## Guidelines
 
-This document provides guidelines and examples for White House Web APIs, encouraging consistency, maintainability, and best practices across applications. White House APIs aim to balance a truly RESTful API interface with a positive developer experience (DX).
+This document provides guidelines and examples for Xiaohongshu Web APIs, encouraging consistency, maintainability, and best practices across applications. White House APIs aim to balance a truly RESTful API interface with a positive developer experience (DX).
 
 This document borrows heavily from:
+* [White House API Standards](https://github.com/WhiteHouse/api-standards)
 * [Designing HTTP Interfaces and RESTful Web Services](https://www.youtube.com/watch?v=zEyg0TnieLg)
 * [API Facade Pattern](http://apigee.com/about/resources/ebooks/api-fa%C3%A7ade-pattern), by Brian Mulloy, Apigee
 * [Web API Design](http://pages.apigee.com/web-api-design-ebook.html), by Brian Mulloy, Apigee
@@ -26,9 +27,8 @@ This document borrows heavily from:
 
 These guidelines aim to support a truly RESTful API. Here are a few exceptions:
 * Put the version number of the API in the URL (see examples below). Don’t accept any requests that do not specify a version number.
-* Allow users to request formats like JSON or XML like this:
-    * http://example.gov/api/v1/magazines.json
-    * http://example.gov/api/v1/magazines.xml
+* Default formats is JSON, like this, without postfix like ".json" or ".xml":
+    * http://example.gov/api/v1/magazines
 
 ## RESTful URLs
 
@@ -38,27 +38,25 @@ These guidelines aim to support a truly RESTful API. Here are a few exceptions:
 * Use plural nouns only for consistency (no singular nouns).
 * Use HTTP verbs (GET, POST, PUT, DELETE) to operate on the collections and elements.
 * You shouldn’t need to go deeper than resource/identifier/resource.
-* Put the version number at the base of your URL, for example http://example.com/v1/path/to/resource.
+* Put the version number at the base of your URL, for example http://www.xiaohongshu.com/v1/path/to/resource.
 * URL v. header:
     * If it changes the logic you write to handle the response, put it in the URL.
     * If it doesn’t change the logic for each response, like OAuth info, put it in the header.
 * Specify optional fields in a comma separated list.
-* Formats should be in the form of api/v2/resource/{id}.json
+* Formats should be in the form of api/v2/resource/{id}
 
 ### Good URL examples
 * List of magazines:
-    * GET http://www.example.gov/api/v1/magazines.json
+    * GET http://www.example.gov/api/v1/magazines
 * Filtering is a query:
-    * GET http://www.example.gov/api/v1/magazines.json?year=2011&sort=desc
-    * GET http://www.example.gov/api/v1/magazines.json?topic=economy&year=2011
+    * GET http://www.example.gov/api/v1/magazines?year=2011&sort=desc
+    * GET http://www.example.gov/api/v1/magazines?topic=economy&year=2011
 * A single magazine in JSON format:
-    * GET http://www.example.gov/api/v1/magazines/1234.json
+    * GET http://www.example.gov/api/v1/magazines/1234
 * All articles in (or belonging to) this magazine:
-    * GET http://www.example.gov/api/v1/magazines/1234/articles.json
-* All articles in this magazine in XML format:
-    * GET http://example.gov/api/v1/magazines/1234/articles.xml
+    * GET http://www.example.gov/api/v1/magazines/1234/articles
 * Specify optional fields in a comma separated list:
-    * GET http://www.example.gov/api/v1/magazines/1234.json?fields=title,subtitle,date
+    * GET http://www.example.gov/api/v1/magazines/1234?fields=title,subtitle,date
 * Add a new article to a particular magazine:
     * POST http://example.gov/api/v1/magazines/1234/articles
 
@@ -139,6 +137,10 @@ Use three simple, common response codes indicating (1) success, (2) failure due 
     * Good: v1, v2, v3
     * Bad: v-1.1, v1.2, 1.3
 * Maintain APIs at least one version back.
+* Should specify which iOS/Android client version this api version supports.
+    * Good: 
+        * Support iOS >= v2.3
+        * Deprecated Android v2.2
 
 
 ## Record limits
@@ -172,7 +174,7 @@ Information about record limits and total available count should also be include
 
 ### GET /magazines
 
-Example: http://example.gov/api/v1/magazines.json
+Example: http://www.xiaohongshu.com/api/v1/magazines
 
 Response body:
 
@@ -219,7 +221,7 @@ Response body:
 
 ### GET /magazines/[id]
 
-Example: http://example.gov/api/v1/magazines/[id].json
+Example: http://www.xiaohongshu.com/api/v1/magazines/[id]
 
 Response body:
 
@@ -238,7 +240,7 @@ Response body:
 
 ### POST /magazines/[id]/articles
 
-Example: Create – POST  http://example.gov/api/v1/magazines/[id]/articles
+Example: Create – POST  http://www.xiaohongshu.com/api/v1/magazines/[id]/articles
 
 Request body:
 
