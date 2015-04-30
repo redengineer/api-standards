@@ -1,4 +1,4 @@
-# 小红书Web API规范
+# 小红书API规范
 
 * [指导原则](#指导原则)
 * [Pragmatic REST](#pragmatic-rest)
@@ -65,6 +65,18 @@ API与用户的通信协议，总是使用HTTPS. (TBD)
 * 非query中的过滤
     * http://www.xiaohongshu.com/magazines/2011/desc
 
+### 过滤信息 (Filtering)
+如果记录数量很多，服务器不可能都将他们返回给用户。API应该提供参数，过滤返回结果。
+
+下面是一些常见 的参数：
+* ?limit=10: 指定返回记录的数量
+* ?offset=10: 指定返回记录的开始位置
+* ?page=2&per_page=100: 指定第几页，以及每页的记录数
+* ?sortby=name&order=asc: 指定返回结果按照哪个属性排序，以及排序顺序
+* ?animal_type_id=1: 指定筛选条件
+
+参数的设计允许存在冗余，即允许API路径和URL参数偶尔有重复。比如，GET /zoo/ID/animals与/animals?zoo_id=ID的含义是相同的。
+
 ## HTTP动词
 
 HTTP verbs, or methods, should be used in compliance with their definitions under the [HTTP/1.1](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) standard.
@@ -77,18 +89,6 @@ The action taken on the representation will be contextual to the media type bein
 | /dogs/1234  | Error           | Show Bo   | If exists, update Bo; If not, error | Delete Bo |
 
 (Example from Web API Design, by Brian Mulloy, Apigee.)
-
-### 过滤信息 (Filtering)
-如果记录数量很多，服务器不可能都将他们返回给用户。API应该提供参数，过滤返回结果。
-
-下面是一些常见 的参数：
-* ?limit=10: 指定返回记录的数量
-* ?offset=10: 指定返回记录的开始位置
-* ?page=2&per_page=100: 指定第几页，以及每页的记录数
-* ?sortby=name&order=asc: 指定返回结果按照哪个属性排序，以及排序顺序
-* ?animal_type_id=1: 指定筛选条件
-
-参数的设计允许存在冗余，即允许API路径和URL参数偶尔有重复。比如，GET /zoo/ID/animals与/animals?zoo_id=ID的含义是相同的。
 
 ## 返回结果
 
