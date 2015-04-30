@@ -1,16 +1,17 @@
-# Xiaohongshu Web API Standards
+# 小红书Web API规范
 
-* [Guidelines](#guidelines)
+* [指导原则](#指导原则)
 * [Pragmatic REST](#pragmatic-rest)
 * [RESTful URLs](#restful-urls)
-* [HTTP Verbs](#http-verbs)
-* [Responses](#responses)
-* [Error handling](#error-handling)
-* [Versions](#versions)
+* [HTTP动词](#http动词)
+* [返回结果](#返回结果)
+* [错误处理](#错误处理-error-handling)
+* [版本](#版本-versioning)
 * [Record limits](#record-limits)
 * [Request & Response Examples](#request--response-examples)
 * [Mock Responses](#mock-responses)
 * [JSONP](#jsonp)
+* [参考文档](#参考文档)
 
 ## 指导原则
 
@@ -142,7 +143,7 @@ Use three simple, common response codes indicating (1) success, (2) failure due 
     * 好的: v1, v2, v3
     * 不好的: v-1.1, v1.2, 1.3
 
-## 返回限制(Record limits)
+## Record limits
 
 * If no limit is specified, return results with a default limit.
 * To get records 51 through 75 do this:
