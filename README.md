@@ -1,4 +1,4 @@
-# 小红书API规范
+# 小红书API设计指南
 
 * [指导原则](#指导原则)
 * [Pragmatic REST](#pragmatic-rest)
